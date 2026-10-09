@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rawan Ezzat — Full Stack .NET Developer building practical web applications with ASP.NET Core, SQL Server, and modern frontend technologies.">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>Rawan Ezzat | Full Stack .NET Developer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #10182c;
+      --panel: rgba(19, 29, 51, .78);
+      --text: #f3f6ff;
+      --muted: #aab5cc;
+      --line: rgba(179, 196, 230, .15);
+      --blue: #7c9cff;
+      --cyan: #6ee7f9;
+      --radius: 22px;
+      --max-width: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 12% 4%, rgba(69, 98, 210, .17), transparent 35rem),
+        radial-gradient(ellipse at 90% 32%, rgba(28, 174, 198, .10), transparent 32rem),
+        var(--bg);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, .navbar-brand { font-family: "Manrope", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+    .container { max-width: var(--max-width); }
+    .section { padding: 105px 0; }
+    .section-alt { background: rgba(255,255,255,.018); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: var(--cyan); font-size: .78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .17em;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+    .section-heading { max-width: 680px; margin-bottom: 44px; }
+    .section-heading h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.045em; margin: 12px 0; }
+    .section-heading p { color: var(--muted); margin: 0; }
+    .gradient-text {
+      background: linear-gradient(100deg, #fff 8%, var(--blue) 58%, var(--cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    /* Navigation */
+    .site-nav {
+      background: rgba(11, 16, 32, .82); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line); padding: 13px 0;
+    }
+    .navbar-brand { font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; color: var(--text); }
+    .brand-dot { color: var(--cyan); }
+    .navbar-nav { gap: 5px; }
+    .nav-link { color: var(--muted); font-size: .9rem; font-weight: 600; padding: 9px 12px !important; }
+    .nav-link:hover, .nav-link.active { color: white; }
+    .nav-cta, .btn-primary-custom {
+      border: 1px solid rgba(124,156,255,.5); color: white !important;
+      background: linear-gradient(135deg, #476be0, #3153b9);
+      box-shadow: 0 8px 24px rgba(49,83,185,.2);
+    }
+    .nav-cta { border-radius: 999px; padding: 9px 17px !important; }
+    .navbar-toggler { border-color: var(--line); }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* Hero */
+    .hero { min-height: 94vh; display: flex; align-items: center; padding: 145px 0 90px; }
+    .availability {
+      display: inline-flex; align-items: center; gap: 9px; padding: 7px 12px;
+      border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.035);
+      color: #dce5f9; font-size: .83rem; margin-bottom: 25px;
+    }
+    .availability-dot { width: 8px; height: 8px; border-radius: 50%; background: #63e6a5; box-shadow: 0 0 0 5px rgba(99,230,165,.10); }
+    .hero h1 { font-size: clamp(3rem, 7vw, 5.7rem); line-height: 1.04; font-weight: 800; letter-spacing: -.075em; margin: 0 0 17px; }
+    .hero-role { font-size: clamp(1.2rem, 2.5vw, 1.7rem); color: #d5def3; font-weight: 600; margin-bottom: 20px; }
+    .hero-copy { max-width: 640px; color: var(--muted); font-size: 1.05rem; margin-bottom: 30px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn-custom {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 19px; border-radius: 12px; font-weight: 700; font-size: .92rem;
+      border: 1px solid var(--line); transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn-custom:hover { transform: translateY(-2px); }
+    .btn-outline-custom { color: var(--text); background: rgba(255,255,255,.025); }
+    .btn-outline-custom:hover { color: white; border-color: rgba(124,156,255,.65); }
+    .social-row { display: flex; gap: 10px; margin-top: 27px; }
+    .social-link {
+      width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px;
+      border: 1px solid var(--line); color: var(--muted); background: rgba(255,255,255,.025);
+      transition: .2s ease;
+    }
+    .social-link:hover { color: var(--cyan); border-color: rgba(110,231,249,.4); transform: translateY(-3px); }
+    .hero-visual { position: relative; max-width: 430px; margin: 20px auto 0; }
+    .hero-orbit {
+      position: absolute; inset: 8% -5%; border: 1px solid rgba(124,156,255,.20);
+      border-radius: 50%; transform: rotate(-20deg);
+    }
+    .profile-card {
+      position: relative; padding: 18px; border: 1px solid rgba(170,190,235,.22);
+      border-radius: 28px; background: linear-gradient(145deg, rgba(31,46,79,.9), rgba(14,22,40,.88));
+      box-shadow: 0 30px 90px rgba(0,0,0,.3); transform: rotate(1deg);
+    }
+    .profile-placeholder {
+      min-height: 340px; border-radius: 19px; display: grid; place-items: center; text-align: center;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(110,231,249,.16), transparent 38%),
+        linear-gradient(145deg, #1d2b4a, #111a30);
+      border: 1px solid rgba(255,255,255,.07); padding: 28px;
+    }
+    .profile-placeholder i { font-size: 5rem; color: #91aaff; }
+    .profile-placeholder strong { display: block; font-size: 1.15rem; margin-top: 16px; }
+    .profile-placeholder span { display: block; color: var(--muted); font-size: .88rem; margin-top: 5px; }
+    .floating-chip {
+      position: absolute; display: flex; align-items: center; gap: 9px; padding: 11px 14px;
+      border: 1px solid var(--line); border-radius: 14px; background: #121d34;
+      box-shadow: 0 15px 35px rgba(0,0,0,.25); font-size: .83rem; font-weight: 700;
+    }
+    .floating-chip i { color: var(--cyan); font-size: 1.1rem; }
+    .chip-one { left: -28px; top: 16%; }
+    .chip-two { right: -25px; bottom: 13%; }
+
+    /* Common panels */
+    .glass-card {
+      height: 100%; padding: 27px; border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .glass-card:hover { transform: translateY(-5px); border-color: rgba(124,156,255,.4); background: rgba(255,255,255,.045); }
+    .icon-box {
+      width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px;
+      color: var(--cyan); background: rgba(110,231,249,.09); border: 1px solid rgba(110,231,249,.15);
+      font-size: 1.35rem; margin-bottom: 20px;
+    }
+    .muted { color: var(--muted); }
+    .about-copy { font-size: 1.02rem; color: var(--muted); }
+    .about-copy p { margin-bottom: 17px; }
+    .quick-facts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 26px; }
+    .fact { padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .fact span { display: block; color: var(--muted); font-size: .78rem; margin-bottom: 3px; }
+    .fact strong { font-size: .96rem; }
+
+    /* Skills */
+    .skill-card h3 { font-size: 1.08rem; font-weight: 800; margin-bottom: 16px; }
+    .skill-card .icon-box { margin-bottom: 18px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag, .project-tag {
+      display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 8px;
+      font-size: .78rem; font-weight: 600; color: #d7e1fb;
+      border: 1px solid rgba(124,156,255,.19); background: rgba(124,156,255,.075);
+    }
+
+    /* Projects */
+    .project-card { overflow: hidden; padding: 0; }
+    .project-banner {
+      min-height: 180px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(110,231,249,.19), transparent 35%),
+        linear-gradient(135deg, #1a2c52, #11192c);
+      border-bottom: 1px solid var(--line);
+    }
+    .project-banner::after {
+      content: ""; position: absolute; width: 190px; height: 190px; border: 1px solid rgba(255,255,255,.11);
+      border-radius: 38px; transform: rotate(35deg);
+    }
+    .project-banner i { position: relative; z-index: 1; font-size: 3.5rem; color: #a7bbff; }
+    .project-body { padding: 25px; }
+    .project-kicker { color: var(--cyan); font-size: .74rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+    .project-body h3 { font-size: 1.25rem; font-weight: 800; margin: 8px 0 12px; }
+    .project-body p { color: var(--muted); font-size: .92rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 18px 0 23px; }
+    .project-links { display: flex; flex-wrap: wrap; gap: 15px; }
+    .project-links a { color: #b9c9ff; font-weight: 700; font-size: .88rem; }
+    .project-links a:hover { color: var(--cyan); }
+
+    /* Experience and education */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+    .timeline-item { position: relative; margin-bottom: 18px; }
+    .timeline-item::before {
+      content: ""; position: absolute; width: 15px; height: 15px; left: -28px; top: 7px;
+      border-radius: 50%; background: var(--blue); border: 4px solid #192543; box-shadow: 0 0 0 1px rgba(124,156,255,.4);
+    }
+    .timeline-date { color: var(--cyan); font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; }
+    .timeline-item h3 { font-size: 1.2rem; font-weight: 800; margin: 6px 0; }
+    .timeline-company { color: #d6def0; font-weight: 600; margin-bottom: 12px; }
+    .timeline-item p, .timeline-item li { color: var(--muted); font-size: .92rem; }
+    .timeline-item ul { padding-left: 18px; margin-bottom: 0; }
+    .education-main { font-size: 1.2rem; font-weight: 800; }
+    .gpa { display: inline-block; padding: 7px 12px; border-radius: 9px; color: var(--cyan); background: rgba(110,231,249,.08); border: 1px solid rgba(110,231,249,.16); font-weight: 800; font-size: .85rem; margin-top: 13px; }
+
+    /* Contact */
+    .contact-panel {
+      padding: clamp(28px, 5vw, 55px); border-radius: 28px; border: 1px solid rgba(124,156,255,.24);
+      background: radial-gradient(ellipse at 100% 0%, rgba(110,231,249,.10), transparent 40%),
+                  linear-gradient(135deg, rgba(32,48,84,.7), rgba(17,25,44,.8));
+    }
+    .contact-panel h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.05em; }
+    .contact-panel p { color: var(--muted); max-width: 650px; }
+    .contact-link {
+      display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 15px;
+      background: rgba(255,255,255,.035); border: 1px solid var(--line); transition: .2s ease;
+    }
+    .contact-link:hover { border-color: rgba(110,231,249,.35); transform: translateY(-2px); }
+    .contact-link > i { color: var(--cyan); font-size: 1.35rem; }
+    .contact-link small { display: block; color: var(--muted); }
+    .contact-link strong { display: block; font-size: .9rem; overflow-wrap: anywhere; }
+    footer { padding: 25px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+    .back-top {
+      width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line);
+      border-radius: 12px; color: var(--text); background: rgba(255,255,255,.03);
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse { padding: 15px 0 5px; }
+      .navbar-nav { align-items: stretch !important; }
+      .nav-cta { display: inline-block; margin-top: 7px; text-align: center; }
+      .hero { min-height: auto; padding-top: 135px; }
+      .hero-copy { margin-left: auto; margin-right: auto; }
+      .hero-content { text-align: center; }
+      .hero-actions, .social-row { justify-content: center; }
+      .hero-visual { max-width: 370px; margin-top: 65px; }
+      .chip-one { left: -10px; }
+      .chip-two { right: -10px; }
+    }
+    @media (max-width: 575px) {
+      .section { padding: 75px 0; }
+      .hero { padding-top: 120px; }
+      .profile-placeholder { min-height: 280px; }
+      .quick-facts { grid-template-columns: 1fr; }
+      .floating-chip { font-size: .74rem; padding: 9px 11px; }
+      .project-body, .glass-card { padding: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+
+
+    /* Light theme overrides */
+    :root {
+      --bg: #f7f9fc;
+      --bg-soft: #eef3fa;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #5e6b80;
+      --line: rgba(29, 48, 79, .13);
+      --blue: #315bd6;
+      --cyan: #078b9a;
+    }
+    body {
+      background:
+        radial-gradient(ellipse at 12% 4%, rgba(49, 91, 214, .08), transparent 35rem),
+        radial-gradient(ellipse at 90% 32%, rgba(7, 139, 154, .07), transparent 32rem),
+        var(--bg);
+    }
+    .section-alt { background: rgba(230, 237, 248, .55); }
+    .gradient-text {
+      background: linear-gradient(100deg, #172033 8%, #315bd6 58%, #078b9a 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .site-nav { background: rgba(255, 255, 255, .9); }
+    .nav-link:hover, .nav-link.active { color: #2450c5; }
+    .navbar-toggler-icon { filter: none; }
+    .availability { background: rgba(255,255,255,.8); color: #43516a; }
+    .hero-role { color: #344158; }
+    .btn-outline-custom { color: var(--text); background: rgba(255,255,255,.8); }
+    .btn-outline-custom:hover { color: #244fc4; border-color: rgba(49,91,214,.45); }
+    .social-link { color: #536178; background: #fff; }
+    .social-link:hover { color: #078b9a; border-color: rgba(7,139,154,.4); }
+    .profile-card {
+      background: linear-gradient(145deg, #ffffff, #eaf0fa);
+      border-color: rgba(49,91,214,.13);
+      box-shadow: 0 24px 70px rgba(31, 55, 99, .12);
+    }
+    .profile-placeholder { background: radial-gradient(circle at 50% 30%, #dbe7ff, #edf5f7 68%); }
+    .profile-placeholder i { color: #5575d8; }
+    .floating-chip { background: rgba(255,255,255,.96); box-shadow: 0 10px 30px rgba(31,55,99,.1); }
+    .floating-chip i { color: #078b9a; }
+    .glass-card { background: rgba(255,255,255,.86); box-shadow: 0 12px 35px rgba(31,55,99,.045); }
+    .glass-card:hover { background: #fff; border-color: rgba(49,91,214,.28); }
+    .icon-box { color: #078b9a; background: rgba(7,139,154,.08); border-color: rgba(7,139,154,.14); }
+    .fact { background: rgba(255,255,255,.8); }
+    .skill-tag { color: #3d4c66; border-color: rgba(49,91,214,.15); background: rgba(49,91,214,.055); }
+    .project-banner { background: linear-gradient(135deg, #e7edff, #e2f5f5); }
+    .project-banner i { color: #315bd6; }
+    .project-kicker, .timeline-date { color: #078b9a; }
+    .project-links a { color: #315bd6; }
+    .project-links a:hover { color: #078b9a; }
+    .timeline-dot { border-color: #f7f9fc; }
+    .timeline-company { color: #344158; }
+    .gpa { color: #087b87; background: rgba(7,139,154,.07); border-color: rgba(7,139,154,.15); }
+    .contact-panel { background: radial-gradient(ellipse at 100% 0%, rgba(7,139,154,.08), transparent 40%), #edf2fb; border-color: rgba(49,91,214,.12); }
+    .contact-link { background: rgba(255,255,255,.85); }
+    .contact-link > i { color: #078b9a; }
+    a:focus-visible, button:focus-visible { outline-color: #078b9a; }
+    @media (prefers-reduced-motion: no-preference) {
+      .glass-card, .contact-link, .btn-custom { transition-duration: .2s; }
+    }
+
+    /* Refined warm-neutral + sage palette */
+    :root {
+      --bg: #faf9f6;
+      --bg-soft: #f1f3ee;
+      --panel: #ffffff;
+      --text: #26312c;
+      --muted: #65716a;
+      --line: rgba(45, 69, 56, .14);
+      --blue: #416b58;
+      --cyan: #b87558;
+    }
+    body {
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 10% 3%, rgba(65,107,88,.075), transparent 34rem),
+        radial-gradient(ellipse at 92% 30%, rgba(184,117,88,.065), transparent 30rem),
+        var(--bg);
+    }
+    .section-alt { background: #f0f3ee; border-color: rgba(45,69,56,.09); }
+    .gradient-text {
+      background: linear-gradient(100deg, #26312c 8%, #416b58 62%, #b87558 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .site-nav { background: rgba(250,249,246,.92); border-color: rgba(45,69,56,.12); }
+    .brand-dot { color: #b87558; }
+    .nav-link:hover, .nav-link.active { color: #416b58; }
+    .nav-cta, .btn-primary-custom {
+      border-color: #416b58; background: #416b58; color: #fff !important;
+      box-shadow: 0 8px 22px rgba(65,107,88,.16);
+    }
+    .nav-cta:hover, .btn-primary-custom:hover { background: #315443; border-color: #315443; }
+    .availability { background: rgba(255,255,255,.85); color: #536158; border-color: rgba(65,107,88,.16); }
+    .hero-role { color: #47564d; }
+    .btn-outline-custom { color: #34483d; background: #fff; border-color: rgba(65,107,88,.22); }
+    .btn-outline-custom:hover { color: #315443; border-color: #416b58; background: #f4f7f3; }
+    .social-link { color: #59685f; background: #fff; }
+    .social-link:hover { color: #416b58; border-color: rgba(65,107,88,.4); }
+    .hero-orbit { border-color: rgba(65,107,88,.22); }
+    .profile-card { background: linear-gradient(145deg, #fff, #f0f3ee); border-color: rgba(65,107,88,.16); box-shadow: 0 24px 70px rgba(38,49,44,.10); }
+    .profile-placeholder { background: radial-gradient(circle at 50% 28%, #e0e9df, #f7f3ed 72%); border-color: rgba(65,107,88,.10); }
+    .profile-placeholder i { color: #416b58; }
+    .floating-chip { color: #2f3e35; background: rgba(255,255,255,.97); border-color: rgba(65,107,88,.13); box-shadow: 0 10px 30px rgba(38,49,44,.10); }
+    .floating-chip i { color: #b87558; }
+    .glass-card { background: rgba(255,255,255,.92); box-shadow: 0 10px 30px rgba(38,49,44,.045); }
+    .glass-card:hover { background: #fff; border-color: rgba(65,107,88,.32); }
+    .icon-box { color: #416b58; background: #edf3ed; border-color: #dce8dd; }
+    .fact { background: #fff; }
+    .skill-tag, .project-tag { color: #405348; border-color: rgba(65,107,88,.16); background: #f0f4ef; }
+    .project-banner { background: linear-gradient(135deg, #e7eee6, #f5eee8); border-color: rgba(65,107,88,.10); }
+    .project-banner i { color: #416b58; }
+    .project-kicker, .timeline-date { color: #a76549; }
+    .project-links a { color: #416b58; }
+    .project-links a:hover { color: #a76549; }
+    .timeline::before { background: rgba(65,107,88,.20); }
+    .timeline-item::before { background: #416b58; border-color: #faf9f6; box-shadow: 0 0 0 1px rgba(65,107,88,.3); }
+    .timeline-company { color: #47564d; }
+    .gpa { color: #416b58; background: #edf3ed; border-color: #dce8dd; }
+    .contact-panel { background: linear-gradient(135deg, #eef3ed, #f7f0e9); border-color: rgba(65,107,88,.15); }
+    .contact-link { background: rgba(255,255,255,.9); }
+    .contact-link > i { color: #b87558; }
+    .back-top { background: #fff; color: #416b58; }
+    a:focus-visible, button:focus-visible { outline-color: #b87558; }
+
+    
+/* Profile photo */
+.profile-photo-wrapper {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
+    border-radius: 19px;
+    background: #edf1f8;
+}
+
+.profile-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    border-radius: 19px;
+}
+
+/* Fallback placeholder */
+.profile-photo-wrapper .profile-placeholder {
+    display: none;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-radius: 19px;
+}
+
+/* Mobile */
+@media (max-width: 575px) {
+    .profile-photo-wrapper {
+        height: 280px;
+    }
+}
+
+
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top site-nav" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="#home" aria-label="Rawan Ezzat home">rawan<span class="brand-dot">.</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link nav-cta" href="#contact">Let's talk <i class="bi bi-arrow-up-right"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 hero-content">
+            <div class="availability"><span class="availability-dot"></span> Open to Full Stack .NET opportunities</div>
+            <p class="eyebrow mb-3">Hello, I'm</p>
+            <h1>Rawan Ezzat<br><span class="gradient-text">Qenawi.</span></h1>
+            <div class="hero-role">Full Stack .NET Developer</div>
+            <p class="hero-copy">
+              I build practical web applications by connecting reliable backend logic with clear, user-friendly interfaces.
+              My focus is C#, ASP.NET Core, SQL Server, and modern frontend development.
+            </p>
+            <div class="hero-actions">
+              <a class="btn-custom btn-primary-custom" href="#projects"><i class="bi bi-grid"></i> Explore my work</a>
+              <a class="btn-custom btn-outline-custom" href="cv.pdf" download><i class="bi bi-download"></i> Download CV</a>
+            </div>
+            <div class="social-row" aria-label="Social links">
+              <a class="social-link" href="https://www.linkedin.com/in/rawan-ezzat-3a2755267?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a class="social-link" href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="bi bi-github"></i></a>
+              <a class="social-link" href="mailto:rawanezzat664@gmail.com" aria-label="Email"><i class="bi bi-envelope"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hero-visual">
+              <div class="hero-orbit" aria-hidden="true"></div>
+              <div class="profile-card">
+                <!-- Replace this placeholder with your photo: 
+                 <img src="image/profile.jpg" alt="Rawan Ezzat" class="profile-photo"> -->
+<div class="profile-photo-wrapper">
+    <img
+        src="./image/profile.jpg"
+        alt="Rawan Ezzat Qenawi"
+        class="profile-photo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+    >
+
+    <div class="profile-placeholder" style="display: none;">
+        <div>
+            <i class="bi bi-code-slash" aria-hidden="true"></i>
+            <strong>Turning ideas into applications</strong>
+            <span>C# · ASP.NET Core · SQL Server</span>
+        </div>
+    </div>
+</div>
+
+              </div>
+              <div class="floating-chip chip-one"><i class="bi bi-braces"></i> .NET Development</div>
+              <div class="floating-chip chip-two"><i class="bi bi-database-check"></i> Data-driven apps</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="about">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">A little about me</span>
+          <h2>Building useful things, <span class="gradient-text">one feature at a time.</span></h2>
+          <p>A Business Information Systems graduate with a focus on software development and solving real business problems.</p>
+        </div>
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-7">
+            <div class="glass-card about-copy">
+              <p>I am a Business Information Systems graduate from Helwan University with a strong interest in building web applications using the .NET ecosystem.</p>
+              <p>Through projects and practical training, I have worked with ASP.NET Core MVC, Web API, Entity Framework Core, SQL Server, and frontend technologies. I enjoy understanding the business need behind a feature and turning it into a clear, maintainable solution.</p>
+              <p>I am continuing to strengthen my full-stack skills and looking for opportunities to contribute, learn from a team, and grow as a developer.</p>
+              <div class="quick-facts">
+                <div class="fact"><span>Focus</span><strong>Full Stack .NET</strong></div>
+                <div class="fact"><span>Education</span><strong>BIS Graduate</strong></div>
+                <div class="fact"><span>Backend</span><strong>ASP.NET Core</strong></div>
+                <div class="fact"><span>Location</span><strong>Egypt</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="glass-card d-flex flex-column justify-content-center">
+              <div class="icon-box"><i class="bi bi-lightbulb"></i></div>
+              <h3 class="h5 fw-bold mb-3">What I bring</h3>
+              <p class="muted mb-3">A combination of business understanding and technical implementation.</p>
+              <ul class="muted mb-0 ps-3">
+                <li class="mb-2">Structured problem-solving and debugging</li>
+                <li class="mb-2">Database-backed web application development</li>
+                <li class="mb-2">Responsive interfaces with Bootstrap and JavaScript</li>
+                <li>Clear communication and a continuous-learning mindset</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">My toolkit</span>
+          <h2>Technical <span class="gradient-text">skills.</span></h2>
+          <p>The technologies and tools I use across backend, database, frontend, and development workflows.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card skill-card">
+              <div class="icon-box"><i class="bi bi-server"></i></div>
+              <h3>Backend</h3>
+              <div class="skill-tags"><span class="skill-tag">C#</span><span class="skill-tag">ASP.NET Core</span><span class="skill-tag">MVC</span><span class="skill-tag">Web API</span><span class="skill-tag">EF Core</span><span class="skill-tag">LINQ</span><span class="skill-tag">REST APIs</span></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card skill-card">
+              <div class="icon-box"><i class="bi bi-database"></i></div>
+              <h3>Database</h3>
+              <div class="skill-tags"><span class="skill-tag">SQL Server</span><span class="skill-tag">SQL</span><span class="skill-tag">CRUD</span><span class="skill-tag">Relationships</span><span class="skill-tag">Joins</span><span class="skill-tag">Database Design</span></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card skill-card">
+              <div class="icon-box"><i class="bi bi-window"></i></div>
+              <h3>Frontend</h3>
+              <div class="skill-tags"><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Bootstrap</span><span class="skill-tag">Responsive UI</span></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card skill-card">
+              <div class="icon-box"><i class="bi bi-wrench-adjustable"></i></div>
+              <h3>Tools</h3>
+              <div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">Visual Studio</span><span class="skill-tag">Swagger</span><span class="skill-tag">Postman</span><span class="skill-tag">Debugging</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Selected work</span>
+          <h2>Projects that turn <span class="gradient-text">ideas into solutions.</span></h2>
+          <p>A selection of projects demonstrating web development, database integration, and practical application workflows.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <article class="glass-card project-card">
+              <div class="project-banner"><i class="bi bi-calendar2-check" aria-hidden="true"></i></div>
+              <div class="project-body">
+                <div class="project-kicker">Business application</div>
+                <h3>Employee Leave Management System</h3>
+                <p>A system for submitting employee leave requests, tracking balances, and supporting role-based approval workflows.</p>
+                <div class="project-tags"><span class="project-tag">ASP.NET Core MVC</span><span class="project-tag">C#</span><span class="project-tag">EF Core</span><span class="project-tag">SQL Server</span><span class="project-tag">Identity</span></div>
+                <div class="project-links"><a href="YOUR_LEAVE_PROJECT_URL" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> Source code</a></div>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="glass-card project-card">
+              <div class="project-banner"><i class="bi bi-person-vcard" aria-hidden="true"></i></div>
+              <div class="project-body">
+                <div class="project-kicker">Workflow application</div>
+                <h3>Visitor Management System</h3>
+                <p>A bilingual reception application for registering visitors, managing check-in and check-out, and viewing visit records.</p>
+                <div class="project-tags"><span class="project-tag">ASP.NET Core MVC</span><span class="project-tag">EF Core</span><span class="project-tag">SQL Server</span><span class="project-tag">JavaScript</span><span class="project-tag">Bootstrap</span></div>
+                <div class="project-links"><a href="YOUR_VISITOR_PROJECT_URL" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> Source code</a></div>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="glass-card project-card">
+              <div class="project-banner"><i class="bi bi-book-half" aria-hidden="true"></i></div>
+              <div class="project-body">
+                <div class="project-kicker">Management system</div>
+                <h3>Bookify</h3>
+                <p>A book management application for organizing books, authors, and categories, with mapping and image-management features.</p>
+                <div class="project-tags"><span class="project-tag">ASP.NET MVC</span><span class="project-tag">EF Core</span><span class="project-tag">AutoMapper</span><span class="project-tag">Cloudinary</span></div>
+                <div class="project-links"><a href="YOUR_BOOKIFY_PROJECT_URL" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> Source code</a></div>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="glass-card project-card">
+              <div class="project-banner"><i class="bi bi-mortarboard" aria-hidden="true"></i></div>
+              <div class="project-body">
+                <div class="project-kicker">REST API</div>
+                <h3>Student REST API</h3>
+                <p>An API for managing student records, practicing CRUD operations, and testing endpoints through Swagger.</p>
+                <div class="project-tags"><span class="project-tag">ASP.NET Core</span><span class="project-tag">Web API</span><span class="project-tag">EF Core</span><span class="project-tag">Swagger</span><span class="project-tag">SQL Server</span></div>
+                <div class="project-links"><a href="YOUR_STUDENT_API_URL" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i> Source code</a></div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <p class="muted small mt-4 mb-0"><i class="bi bi-info-circle me-1"></i> Replace the sample project links with your actual repositories before publishing.</p>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Experience</span>
+          <h2>Learning through <span class="gradient-text">real work.</span></h2>
+          <p>Practical training and teaching experiences that helped me build technical and communication skills.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <div class="timeline">
+              <article class="glass-card timeline-item">
+                <div class="timeline-date">2026 · Internship</div>
+                <h3>.NET Trainee</h3>
+                <div class="timeline-company">Hero</div>
+                <p>Contributed to an employee leave management project and practiced building web application features with the .NET stack.</p>
+                <div class="skill-tags"><span class="skill-tag">C#</span><span class="skill-tag">ASP.NET Core MVC</span><span class="skill-tag">EF Core</span><span class="skill-tag">SQL Server</span></div>
+              </article>
+              <article class="glass-card timeline-item">
+                <div class="timeline-date">2026 · Teaching</div>
+                <h3>Backend .NET Instructor</h3>
+                <div class="timeline-company">Code Plus</div>
+                <p>Delivered online training sessions covering C#, OOP, SQL Server, Web API, and practical backend development.</p>
+                <div class="skill-tags"><span class="skill-tag">C#</span><span class="skill-tag">OOP</span><span class="skill-tag">SQL Server</span><span class="skill-tag">Web API</span></div>
+              </article>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="glass-card h-auto">
+              <div class="icon-box"><i class="bi bi-rocket-takeoff"></i></div>
+              <h3 class="h5 fw-bold">What I'm working toward</h3>
+              <p class="muted mb-0">Growing into a dependable Full Stack .NET Developer by improving code quality, debugging, API design, database development, and deployment skills through continuous practice.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="education">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Education</span>
+          <h2>Academic <span class="gradient-text">background.</span></h2>
+        </div>
+        <div class="glass-card">
+          <div class="row align-items-center g-4">
+            <div class="col-auto"><div class="icon-box mb-0"><i class="bi bi-mortarboard"></i></div></div>
+            <div class="col">
+              <div class="education-main">Bachelor of Business Information Systems</div>
+              <div class="muted">Faculty of Commerce · Helwan University</div>
+              <div class="muted small mt-1">2022 – 2026</div>
+              <span class="gpa">GPA: 3.85</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <div class="row g-5 align-items-center">
+            <div class="col-lg-7">
+              <span class="eyebrow mb-3">Get in touch</span>
+              <h2 class="mt-2 mb-3">Let's build something <span class="gradient-text">meaningful.</span></h2>
+              <p class="mb-4">I'm open to Full Stack .NET opportunities, junior developer roles, and professional connections. Feel free to reach out.</p>
+              <a class="btn-custom btn-primary-custom" href="mailto:rawanezzat664@gmail.com"><i class="bi bi-envelope"></i> Contact me</a>
+            </div>
+            <div class="col-lg-5">
+              <div class="d-grid gap-3">
+                <a class="contact-link" href="mailto:rawanezzat664@gmail.com"><i class="bi bi-envelope"></i><span><small>Email</small><strong>rawanezzat664@gmail.com</strong></span></a>
+                <a class="contact-link" href="https://www.linkedin.com/in/rawan-ezzat-3a2755267?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i><span><small>LinkedIn</small><strong>Connect professionally</strong></span></a>
+                <a class="contact-link" href="YOUR_GITHUB_URL" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i><span><small>GitHub</small><strong>Explore my repositories</strong></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <p class="mb-0">© <span id="year">2026</span> Rawan Ezzat Qenawi. Built with HTML, CSS, Bootstrap, and JavaScript.</p>
+      <a class="back-top" href="#home" aria-label="Back to top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Keep the footer year current.
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Close the mobile navigation after a section link is selected.
+    document.querySelectorAll("#mainNav .nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        const nav = document.getElementById("mainNav");
+        if (nav.classList.contains("show")) {
+          bootstrap.Collapse.getOrCreateInstance(nav).hide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
