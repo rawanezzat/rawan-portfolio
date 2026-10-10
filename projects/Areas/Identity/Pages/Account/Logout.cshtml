@@ -1,0 +1,48 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-body text-center p-5">
+                    <div class="text-success mb-4">
+                        <i class="bi bi-check-circle-fill fs-1"></i>
+                    </div>
+                    <h1 class="text-center fw-bold text-primary mb-3">@ViewData["Title"]</h1>
+
+                    @{
+                        if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <p class="lead mb-4">Are you sure you want to log out?</p>
+                            <form method="post">
+                                <button type="submit" class="btn btn-danger btn-lg px-5">Yes, Logout</button>
+                                <a href="/" class="btn btn-secondary btn-lg px-5 ms-2">Cancel</a>
+                            </form>
+                        }
+                        else
+                        {
+                            <p class="lead mb-4">You have successfully logged out of the application.</p>
+                            <a href="/" class="btn btn-primary btn-lg px-5">Return to Home</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (!(User.Identity?.IsAuthenticated ?? false))
+    {
+        <script>
+            // Optional: Redirect to home page after 3 seconds
+            setTimeout(function() {
+                window.location.href = '/';
+            }, 3000);
+        </script>
+    }
+}
