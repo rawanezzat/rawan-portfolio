@@ -1,0 +1,400 @@
+﻿@using Credit2.Core.ViewModels
+@model List<HolderDetailsViewModel>
+@{
+    ViewData["Title"] = " Records";
+}
+
+<div class="alert bg-light-primary border border-primary border-2 border-dashed d-flex justify-content-between w-100 p-5 mb-10">
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-40px me-4">
+            <div class="symbol-label fs-2 fw-semibold text-success">
+                <span class="svg-icon svg-icon-2 svg-icon-primary">
+                    <!-- Shield/Security Icon -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="currentColor" />
+                        <path d="M12.0006 11.1542C13.1434 11.1542 14.0777 10.22 14.0777 9.0771C14.0777 7.93424 13.1434 7 12.0006 7C10.8577 7 9.92348 7.93424 9.92348 9.0771C9.92348 10.22 10.8577 11.1542 12.0006 11.1542Z" fill="currentColor" />
+                    </svg>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex flex-column pe-0 pe-sm-10">
+            <h5 class="mb-1">My Records</h5>
+        </div>
+    </div>
+
+    @if (User.IsInRole("Accountant"))
+    {
+        <div>
+            <a asp-controller="Records" asp-action="Create" class="btn btn-sm btn-success">
+                <i class="bi bi-plus-circle"></i> Add Record
+            </a>
+        </div>
+    }
+</div>
+<!-- Success/Error Messages -->
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success d-flex align-items-center p-5 mb-10">
+        <i class="bi bi-check-circle fs-2 me-3"></i>
+        <span>@ViewBag.SuccessMessage</span>
+    </div>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger d-flex align-items-center p-5 mb-10">
+        <i class="bi bi-exclamation-circle fs-2 me-3"></i>
+        <span>@ViewBag.ErrorMessage</span>
+    </div>
+}
+
+<!-- Records Card -->
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h3 class="card-title">Records List</h3>
+    </div>
+    <div class="card-body pt-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-10">
+                <span class="svg-icon svg-icon-3x svg-icon-muted mb-5">
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="currentColor" />
+                        <path d="M12.0006 11.1542C13.1434 11.1542 14.0777 10.22 14.0777 9.0771C14.0777 7.93424 13.1434 7 12.0006 7C10.8577 7 9.92348 7.93424 9.92348 9.0771C9.92348 10.22 10.8577 11.1542 12.0006 11.1542Z" fill="currentColor" />
+                    </svg>
+                </span>
+                <h4 class="fw-bold">No Records Found</h4>
+                <div class="text-muted">You don't have any records assigned to you yet.</div>
+                <a asp-controller="Records" asp-action="Create" class="btn btn-success mt-4">
+                    <i class="bi bi-plus-circle"></i> Add Your First Record
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- Search and Export Bar - Bootstrap Only -->
+            <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
+                <!-- Left side: Search and Filter -->
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <!-- Search with icon inside using Bootstrap utilities -->
+                    <div class="position-relative">
+                        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        <input type="text" id="searchInput" class="form-control form-control-solid" style="width: 300px; padding-left: 2.5rem;" placeholder="Search records...">
+                    </div>
+
+                    <!-- Filter by Phase -->
+                    <select id="phaseFilter" class="form-select form-select-solid" style="width: 150px;">
+                        <option value="">All Phases</option>
+                        <option value="Accountant">Accountant</option>
+                        <option value="Holder">Holder</option>
+                        <option value="Auditor">Auditor</option>
+                        <option value="BoardMember">Board Member</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <!-- Right side: Export Dropdown and Reset Button -->
+                <div class="d-flex gap-2 align-items-center">
+                    <!-- Export Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-success btn-light-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-download me-1"></i> Export
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <button class="dropdown-item" id="exportCsvBtn">
+                                    <i class="bi bi-filetype-csv me-2 text-success"></i> Export as CSV
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" id="exportExcelBtn">
+                                    <i class="bi bi-file-earmark-excel me-2 text-success"></i> Export as Excel
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" id="exportPdfBtn">
+                                    <i class="bi bi-file-pdf me-2 text-danger"></i> Export as PDF
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Reset Filters Button -->
+                    <button id="resetFilters" class="btn btn-sm btn-outline-secondary btn-color-primary">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
+                    </button>
+                </div>
+            </div>
+          
+
+            <div class="table-responsive">
+                <table class="table table-row-dashed table-row-gray-300 gy-2 align-middle" id="recordsTable">
+                    <thead>
+                        <tr class="fw-bold fs-6 text-gray-800">
+                            <th>Record #</th>
+                            <th>Holder Name</th>
+                            <th>Card Number</th>
+                            <th>Bank</th>
+                            <th>Statement Date</th>
+                            <th>Description</th>
+                            <th>Phase</th>
+                            <th>create by</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var record in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bold">#@record.RecordId</span>
+                                </td>
+                                <td>@record.HolderName</td>
+                                <td>**** **** **** @record.CardNumber.Substring(Math.Max(0, record.CardNumber.Length - 4))</td>
+                                <td>@record.BankName</td>
+                                <td>@record.StatementDate.ToString("dd/MM/yyyy")</td>
+                                <td>@record.Description</td>
+                                <td>
+                                    @{
+                                        string phaseBadge = record.CurrentPhase switch
+                                        {
+                                            "Accountant" => "badge bg-light-info text-info",
+                                            "Holder" => "badge bg-light-warning text-warning",
+                                            "Auditor" => "badge bg-light-danger text-danger",
+                                            "BoardMember" => "badge bg-light-primary text-primary",
+                                            "Approved" => "badge bg-light-success text-success",
+                                            "Rejected" => "badge bg-light-dark text-dark",
+                                            "Completed" => "badge bg-light-primary text-primary",
+                                            _ => "badge bg-light-secondary text-secondary"
+                                        };
+                                    }
+                                    <span class="@phaseBadge px-2 py-1 rounded-3 fw-semibold small">
+                                        @record.CurrentPhase
+                                    </span>
+                                </td>
+                                <td>@record.CreatedByName</td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-recordId="@record.RecordId"
+                                           class="btn btn-sm btn-outline-primary" title="Edit Details">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a asp-action="Status" asp-route-id="@record.RecordId"
+                                           class="btn btn-sm btn-outline-primary" title="View Status">
+                                            <i class="bi bi-info-circle"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Search and filter functionality
+            function filterTable() {
+                var searchText = $('#searchInput').val().toLowerCase();
+                var phaseFilter = $('#phaseFilter').val().toLowerCase();
+                var visibleCount = 0;
+
+                $('#tableBody tr').each(function() {
+                    var row = $(this);
+                    var text = row.text().toLowerCase();
+                    var phase = row.find('td:eq(6)').text().trim().toLowerCase();
+
+                    var matchesSearch = searchText === '' || text.indexOf(searchText) > -1;
+                    var matchesPhase = phaseFilter === '' || phase.indexOf(phaseFilter) > -1;
+
+                    if (matchesSearch && matchesPhase) {
+                        row.show();
+                        visibleCount++;
+                    } else {
+                        row.hide();
+                    }
+                });
+
+                $('#visibleCount').text(visibleCount);
+
+                if (visibleCount === 0) {
+                    $('#noResultsMessage').show();
+                } else {
+                    $('#noResultsMessage').hide();
+                }
+            }
+
+            $('#searchInput').on('keyup', filterTable);
+            $('#phaseFilter').on('change', filterTable);
+
+            // Reset filters
+            $('#resetFilters').click(function() {
+                $('#searchInput').val('');
+                $('#phaseFilter').val('');
+                filterTable();
+            });
+
+            // Helper function to get visible data for export
+            function getExportData() {
+                var data = [];
+                var headers = [];
+
+                // Get headers
+                $('#recordsTable thead th').each(function() {
+                    var headerText = $(this).text().trim();
+                    if (headerText !== 'Actions') {
+                        headers.push(headerText);
+                    }
+                });
+                data.push(headers);
+
+                // Get visible rows data
+                $('#tableBody tr:visible').each(function() {
+                    var row = [];
+                    $(this).find('td').each(function(index) {
+                        // Skip actions column (last column)
+                        if (index < 7) {
+                            var cellText = $(this).text().trim();
+                            // Remove # from Record # if present
+                            if (index === 0) {
+                                cellText = cellText.replace('#', '');
+                            }
+                            row.push(cellText);
+                        }
+                    });
+                    data.push(row);
+                });
+
+                return data;
+            }
+
+            // Export to CSV
+            $('#exportCsvBtn').click(function() {
+                var data = getExportData();
+
+                // Convert to CSV
+                var csv = data.map(row =>
+                    row.map(cell => {
+                        if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
+                            return '"' + cell.replace(/"/g, '""') + '"';
+                        }
+                        return cell;
+                    }).join(',')
+                ).join('\n');
+
+                // Download CSV
+                var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }); // Add BOM for UTF-8
+                var link = document.createElement('a');
+                var url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'records_export.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Export to Excel
+            $('#exportExcelBtn').click(function() {
+                var data = getExportData();
+
+                // Create worksheet
+                var wb = XLSX.utils.book_new();
+                var ws = XLSX.utils.aoa_to_sheet(data);
+
+                // Set column widths
+                var colWidths = [
+                    { wch: 10 }, // Record #
+                    { wch: 20 }, // Holder Name
+                    { wch: 20 }, // Card Number
+                    { wch: 15 }, // Bank
+                    { wch: 15 }, // Statement Date
+                    { wch: 30 }, // Description
+                    { wch: 15 }  // Phase
+                ];
+                ws['!cols'] = colWidths;
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Records');
+                XLSX.writeFile(wb, 'records_export.xlsx');
+            });
+
+            // Export to PDF
+            $('#exportPdfBtn').click(function() {
+                const { jsPDF } = window.jspdf;
+                var doc = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                // Add title
+                doc.setFontSize(16);
+                doc.text('Records List', 14, 15);
+                doc.setFontSize(10);
+                doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
+
+                // Get data for PDF
+                var data = getExportData();
+                var headers = data[0];
+                var body = data.slice(1);
+
+                // Create PDF table
+                doc.autoTable({
+                    head: [headers],
+                    body: body,
+                    startY: 30,
+                    theme: 'grid',
+                    styles: {
+                        fontSize: 8,
+                        cellPadding: 2,
+                        lineColor: [200, 200, 200],
+                        lineWidth: 0.1
+                    },
+                    headStyles: {
+                        fillColor: [0, 200, 81],
+                        textColor: [255, 255, 255],
+                        fontSize: 9,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 15 }, // Record #
+                        1: { cellWidth: 35 }, // Holder Name
+                        2: { cellWidth: 35 }, // Card Number
+                        3: { cellWidth: 25 }, // Bank
+                        4: { cellWidth: 25 }, // Statement Date
+                        5: { cellWidth: 50 }, // Description
+                        6: { cellWidth: 20 }  // Phase
+                    },
+                    margin: { left: 10, right: 10 }
+                });
+
+                // Add footer with record count
+                var pageCount = doc.internal.getNumberOfPages();
+                for (var i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.text(
+                        `Page ${i} of ${pageCount} | Total Records: ${body.length}`,
+                        doc.internal.pageSize.width - 50,
+                        doc.internal.pageSize.height - 10
+                    );
+                }
+
+                // Save PDF
+                doc.save('records_export.pdf');
+            });
+        });
+    </script>
+}

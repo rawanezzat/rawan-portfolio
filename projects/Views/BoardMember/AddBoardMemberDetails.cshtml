@@ -1,0 +1,475 @@
+﻿@using Credit2.Core.ViewModels
+@model BoardMemberDetailsViewModel
+@{
+    ViewData["Title"] = "Board Member Phase";
+}
+
+<div class="container-xxl mt-5">
+    <!-- Board Member Phase -->
+    <div class="card card-flush shadow-sm mb-7">
+        <div class="card-header justify-content-center bg-light-primary">
+            <h3 class="card-title fw-bolder mb-0" style="color: #00C851">
+                Board Member Review 
+            </h3>
+        </div>
+
+        <div class="card-body">
+            <!-- Error/Success Messages -->
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger d-flex align-items-center p-5 mb-10">
+                    <i class="bi bi-exclamation-circle fs-2 me-3"></i>
+                    <span>@TempData["ErrorMessage"]</span>
+                </div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success d-flex align-items-center p-5 mb-10">
+                    <i class="bi bi-check-circle fs-2 me-3"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                </div>
+            }
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
+            }
+
+            <!-- Main Form -->
+            <form asp-action="SaveBoardMemberDetails" asp-controller="BoardMember" method="post" enctype="multipart/form-data" id="boardMemberForm">
+                @Html.AntiForgeryToken()
+
+                <!-- ============ CRITICAL: ALL HIDDEN FIELDS FOR MODEL BINDING ============ -->
+                <input type="hidden" asp-for="RecordId" />
+                <input type="hidden" asp-for="CurrentPhase" />
+                <input type="hidden" asp-for="HolderName" />
+                <input type="hidden" asp-for="BankName" />
+                <input type="hidden" asp-for="CardNumber" />
+                <input type="hidden" asp-for="Description" />
+                <input type="hidden" asp-for="AccountantComment" />
+                <input type="hidden" asp-for="AccountantFileUrl" />
+                <!-- ====================================================================== -->
+                <!-- Accountant Fields - Read Only -->
+                <div class="card card-bordered mb-7">
+                    <div class="card-header bg-light-primary justify-content-center">
+                        <h4 class="card-title text-primary fw-bolder mb-0" style="color: #00C851">
+                            Accountant Fields 
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-5 mb-5">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Holder</label>
+                                <input type="text" class="form-control form-control-solid" value="@Model.HolderName" disabled />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Bank</label>
+                                <input type="text" class="form-control form-control-solid" value="@Model.BankName" disabled />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Card Number</label>
+                                <input type="text" class="form-control form-control-solid" value="@Model.CardNumber" disabled />
+                            </div>
+                        </div>
+
+                        <div class="row g-5 mb-5">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Description</label>
+                                <textarea class="form-control form-control-solid" rows="2" disabled>@Model.Description</textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Statement Date</label>
+                                <input type="text" class="form-control form-control-solid" value="@Model.StatementDate.ToString("dd MMM, yyyy")" disabled />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Accountant Comment</label>
+                                <textarea class="form-control form-control-solid" rows="2" disabled>@Model.AccountantComment</textarea>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.AccountantFileUrl))
+                        {
+                            <div>
+                                <a href="@Model.AccountantFileUrl" target="_blank" class="text-primary fw-bold">
+                                    <i class="bi bi-file-pdf"></i> @Model.HolderName @Model.BankName Statement.pdf
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Holder Fields - Read Only -->
+                <div class="card card-bordered mb-7">
+                    <div class="card-header bg-light-primary justify-content-center">
+                        <h4 class="card-title text-primary fw-bolder mb-0" style="color: #00C851">
+                            Holder Fields 
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+                        @if (Model.HolderFields != null && Model.HolderFields.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-row-dashed table-row-gray-300 gy-2 align-middle">
+                                    <thead>
+                                        <tr class="fw-bold fs-6 text-gray-800">
+                                            <th>Date</th>
+                                            <th>Comment</th>
+                                            <th>Amount</th>
+                                            <th>Currency</th>
+                                            <th>Cost Center</th>
+                                            <th>Expenses</th>
+                                            <th>Invoice</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var field in Model.HolderFields)
+                                        {
+                                            <tr>
+                                                <td>@field.Date.ToString("dd/MM/yyyy")</td>
+                                                <td>@field.Comment</td>
+                                                <td>@field.Amount.ToString("N2")</td>
+                                                <td>@field.Currency</td>
+                                                <td>@field.CostCenter</td>
+                                                <td>@field.Expenses</td>
+                                                <td>@field.Invoice</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(field.FileUrl))
+                                                    {
+                                                        <a href="@field.FileUrl" target="_blank" class="btn btn-sm btn-light-primary">
+                                                            <i class="bi bi-file-earmark"></i> View
+                                                        </a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="fw-bold">
+                                            <td colspan="2" class="text-end">Total:</td>
+                                            <td>@Model.HolderFields.Sum(f => f.Amount).ToString("N2")</td>
+                                            <td>@Model.HolderFields.FirstOrDefault()?.Currency</td>
+                                            <td colspan="4"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No holder details submitted.</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Auditor Fields - Read Only -->
+                @if (Model.ExistingAuditorFields != null && Model.ExistingAuditorFields.Any())
+                {
+                    // Check if any status is Rejected
+                    var hasRejected = Model.ExistingAuditorFields.Any(a => a.Status == "Rejected");
+                    var hasApproved = Model.ExistingAuditorFields.Any(a => a.Status == "Approved");
+                    var hasPending = Model.ExistingAuditorFields.Any(a => a.Status != "Approved" && a.Status != "Rejected");
+
+                    <div class="card card-bordered mb-7">
+                        <!-- Conditional Header based on status -->
+                        <div class="card-header justify-content-center @(hasRejected ? "bg-light-danger" : hasApproved ? "bg-light-success" : "bg-light-warning")">
+                            <h4 class="card-title fw-bolder mb-0" style="color: @(hasRejected ? "#dc3545" : hasApproved ? "#00C851" : "#ffc107")">
+                              
+                                @(hasRejected ? "Rejected by Auditor" : hasApproved ? "Approved by Auditor" : "Pending Review")
+                            </h4>
+                        </div>
+
+                        <div class="card-body">
+                            @foreach (var audit in Model.ExistingAuditorFields)
+                            {
+                                <div class="row g-5 mb-5">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Attached File</label>
+                                        @if (!string.IsNullOrEmpty(audit.AuditFileUrl))
+                                        {
+                                            <p class="form-control form-control-solid">
+                                                <a href="@audit.AuditFileUrl" target="_blank">@System.IO.Path.GetFileName(audit.AuditFileUrl)</a>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="form-control form-control-solid">No file attached</p>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Comment</label>
+                                        <p class="form-control form-control-solid">@audit.Comment</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Status</label>
+                                        <p class="form-control form-control-solid">
+                                            @if (audit.Status == "Approved")
+                                            {
+                                                <span class="badge" style="background-color: #00C851; color: white; padding: 8px 15px; font-size: 0.9rem;">
+                                                    @audit.Status
+                                                </span>
+                                            }
+                                            else if (audit.Status == "Rejected")
+                                            {
+                                                <span class="badge" style="background-color: #dc3545; color: white; padding: 8px 15px; font-size: 0.9rem;">
+                                                    @audit.Status
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge" style="background-color: #ffc107; color: black; padding: 8px 15px; font-size: 0.9rem;">
+                                                   @audit.Status
+                                                </span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Review Date</label>
+                                        <p class="form-control form-control-solid">@audit.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                                    </div>
+                                </div>
+                                @if (audit != Model.ExistingAuditorFields.Last())
+                                {
+                                    <hr class="my-4" />
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+                <!-- Existing Board Member Fields - Read Only -->
+                @if (Model.ExistingBoardMemberFields != null && Model.ExistingBoardMemberFields.Any())
+                {
+                    <div class="card card-bordered mb-7">
+                        <div class="card-header bg-light-info justify-content-center">
+                            <h4 class="card-title fw-bolder mb-0" style="color: #00C851">
+                                Previous Board Member Reviews
+                            </h4>
+                        </div>
+
+                        <div class="card-body">
+                            @foreach (var board in Model.ExistingBoardMemberFields)
+                            {
+                                <div class="row g-5 mb-5">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Attached File</label>
+                                        @if (!string.IsNullOrEmpty(board.BoardMemberFileUrl))
+                                        {
+                                            <p class="form-control form-control-solid">
+                                                <a href="@board.BoardMemberFileUrl" target="_blank">@System.IO.Path.GetFileName(board.BoardMemberFileUrl)</a>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="form-control form-control-solid">No file attached</p>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Comment</label>
+                                        <p class="form-control form-control-solid">@board.Comment</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Status</label>
+                                        <p class="form-control form-control-solid">
+                                            <span class="badge badge-info">@board.Status</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Review Date</label>
+                                        <p class="form-control form-control-solid">@board.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                                    </div>
+                                </div>
+                                @if (board != Model.ExistingBoardMemberFields.Last())
+                                {
+                                    <hr class="my-4" />
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Add New Board Member Field -->
+                <div class="card card-flush shadow-sm">
+                    <div class="card-header justify-content-center bg-light-primary">
+                        <h3 class="card-title fw-bolder mb-0" style="color: #00C851">
+                            Add Board Member Review
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="boardMemberFieldsContainer">
+                            @for (int i = 0; i < Model.BoardMemberFields.Count; i++)
+                            {
+                                <div class="board-member-field-item border rounded p-3 mb-3 @(i > 0 ? "mt-3" : "")">
+                                    <input type="hidden" asp-for="BoardMemberFields[i].BoardMemberFieldId" />
+
+                                    <div class="row g-5 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Status</label>
+                                            <select asp-for="BoardMemberFields[i].Status" class="form-select form-select-solid" required>
+                                                <option value="">-- Select Status --</option>
+                                                <option value="Approved">✅ Approve</option>
+                                                <option value="Rejected">❌ Reject</option>
+                                                <option value="Redirect">↩️ Redirect to Auditor</option>
+                                            </select>
+                                            <span asp-validation-for="BoardMemberFields[i].Status" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Attach File (Optional)</label>
+                                            <input type="file" asp-for="BoardMemberFields[i].BoardMemberFile"
+                                                   class="form-control form-control-solid"
+                                                   accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
+                                            <small class="text-muted">Max 10MB</small>
+                                        </div>
+                                    </div>
+                                    <div class="row g-5 mb-3">
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">Comment <span class="text-danger">*</span></label>
+                                            <textarea asp-for="BoardMemberFields[i].Comment"
+                                                      class="form-control form-control-solid"
+                                                      rows="4"
+                                                      placeholder="Enter your board member review comments..."></textarea>
+                                            <span asp-validation-for="BoardMemberFields[i].Comment" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    @if (i > 0)
+                                    {
+                                        <div class="text-end mt-2">
+                                            <button type="button" class="btn btn-sm btn-danger remove-field">
+                                                <i class="bi bi-trash"></i> Remove
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        @* <div class="mt-3">
+                            <button type="button" class="btn btn-info" id="addMoreFields">
+                                <i class="bi bi-plus-circle"></i> Add Another Review
+                            </button>
+                        </div> *@
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-success me-3" id="submitBtn">
+                                <i class="bi bi-check-circle"></i> Submit Review
+                            </button>
+                            @* <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a> *@
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            var fieldIndex = @Model.BoardMemberFields.Count;
+
+            // Add more fields
+            $("#addMoreFields").click(function() {
+                var newField = `
+                    <div class="board-member-field-item border rounded p-3 mb-3 mt-3">
+                        <input type="hidden" name="BoardMemberFields[${fieldIndex}].BoardMemberFieldId" value="" />
+
+                        <div class="row g-5 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Status</label>
+                                <select name="BoardMemberFields[${fieldIndex}].Status" class="form-select form-select-solid">
+                                    <option value="Approved">✅ Approve</option>
+                                    <option value="Rejected">❌ Reject</option>
+                                    <option value="Pending">⏳ Pending</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Attach File (Optional)</label>
+                                <input type="file" name="BoardMemberFields[${fieldIndex}].BoardMemberFile"
+                                       class="form-control form-control-solid"
+                                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
+                            </div>
+                        </div>
+
+                        <div class="row g-5 mb-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Comment <span class="text-danger">*</span></label>
+                                <textarea name="BoardMemberFields[${fieldIndex}].Comment"
+                                          class="form-control form-control-solid"
+                                          rows="4"
+                                          placeholder="Enter your board member review comments..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-2">
+                            <button type="button" class="btn btn-sm btn-danger remove-field">
+                                <i class="bi bi-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                $("#boardMemberFieldsContainer").append(newField);
+                fieldIndex++;
+            });
+
+            // Remove field
+            $(document).on('click', '.remove-field', function() {
+                $(this).closest('.board-member-field-item').remove();
+                reindexFields();
+            });
+
+            function reindexFields() {
+                $('#boardMemberFieldsContainer .board-member-field-item').each(function(index) {
+                    $(this).find('input, select, textarea').each(function() {
+                        var name = $(this).attr('name');
+                        if (name) {
+                            var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                            $(this).attr('name', newName);
+                        }
+                    });
+                });
+                fieldIndex = $('#boardMemberFieldsContainer .board-member-field-item').length;
+            }
+
+            // Form submission handler
+            $("#boardMemberForm").submit(function() {
+                var hasComment = false;
+                $('textarea[name*="Comment"]').each(function() {
+                    if ($(this).val().trim() !== '') {
+                        hasComment = true;
+                    }
+                });
+
+                if (!hasComment) {
+                    alert('Please add at least one comment.');
+                    return false;
+                }
+
+                $("#submitBtn").prop("disabled", true);
+                $("#submitBtn").html('<span class="spinner-border spinner-border-sm" role="status"></span> Submitting...');
+            });
+        });
+    </script>
+}

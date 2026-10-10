@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = " Landing Page";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-lg-6 mb-5 mb-lg-0">
+
+
+                <!-- Main Heading -->
+                <h1 class="display-1 fw-bold mb-3">
+                    credit <span class="text-primary">System</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <h2 class="h3 text-muted mb-4">
+                    Modern & Creative Design Solutions
+                </h2>
+
+                <!-- Description -->
+                <p class="lead text-muted mb-4">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                </p>
+
+                <!-- Button -->
+                <a 
+                    asp-controller="Records"
+                   asp-action="Index"
+                   class="btn btn-outline-primary btn-lg rounded-pill px-4 py-3 btn btn-primary">
+                    GET STARTED
+                </a>
+
+                
+            </div>
+
+            <!-- Right Image -->
+            <div class="col-lg-6 text-center">
+                <img src="@Url.Content("~/images/home.png")"
+                     class="img-fluid"
+                     style="max-height: 500px;"
+                     alt="Landing Illustration">
+            </div>
+
+        </div>
+    </div>
+</section>

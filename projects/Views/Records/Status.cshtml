@@ -1,0 +1,318 @@
+﻿@using Credit2.Core.Models
+@model Records
+@{
+    ViewData["Title"] = $"Record #{Model.RecordsId} - Status";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+
+            <!-- Header Card -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between bg-light-primary border border-primary border-2 border-dashed py-3 px-4">
+                    <div class="d-flex align-items-center">
+                        <div class="symbol symbol-50px me-3">
+                            <div class="symbol-label fs-3 fw-bold text-success">
+                                <span class="svg-icon svg-icon-2 svg-icon-primary">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="currentColor" />
+                                        <path d="M12.0006 11.1542C13.1434 11.1542 14.0777 10.22 14.0777 9.0771C14.0777 7.93424 13.1434 7 12.0006 7C10.8577 7 9.92348 7.93424 9.92348 9.0771C9.92348 10.22 10.8577 11.1542 12.0006 11.1542Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Record Status</h5>
+                            <span class="text-muted small">Record @Model.RecordsId</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a asp-action="Index" class="btn btn-sm btn-success">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Record Details Card -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h3 class="card-title mb-0 fw-bold">Record Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Record ID:</td>
+                                    <td>@Model.RecordsId</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Holder:</td>
+                                    <td>@Model.Holder?.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Bank:</td>
+                                    <td>@Model.UserCard?.Bank</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Card Number:</td>
+                                    <td>**** **** **** @Model.UserCard?.CardNumber?.Substring(Math.Max(0, Model.UserCard.CardNumber.Length - 4))</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Statement Date:</td>
+                                    <td>@Model.StatementDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Description:</td>
+                                    <td>@Model.Description</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Created By:</td>
+                                    <td>@Model.CreatedByUser?.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Created At:</td>
+                                    <td>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Phase Card -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h3 class="card-title mb-0 fw-bold">Current Phase</h3>
+                </div>
+                <div class="card-body">
+                    @{
+                        string phaseBadge = Model.CurrentPhase switch
+                        {
+                            "Accountant" => "badge bg-light-info text-info",
+                            "Holder" => "badge bg-light-warning text-warning",
+                            "Auditor" => "badge bg-light-danger text-danger",
+                            "BoardMember" => "badge bg-light-primary text-primary",
+                            "Approved" => "badge bg-light-success text-success",
+                            "Rejected" => "badge bg-light-dark text-dark",
+                            "Completed" => "badge bg-light-primary text-primary",
+                            _ => "badge bg-light-secondary text-secondary"
+                        };
+
+                        string statusClass = Model.CurrentPhase switch
+                        {
+                            "Approved" => "bg-success",
+                            "Rejected" => "bg-danger",
+                            "Completed" => "bg-primary",
+                            "Accountant" => "bg-info",
+                            "Holder" => "bg-warning",
+                            "Auditor" => "bg-danger",
+                            "BoardMember" => "bg-primary",
+                            _ => "bg-secondary"
+                        };
+
+                        string statusText = Model.CurrentPhase switch
+                        {
+                            "Accountant" => "Pending",
+                            "Holder" => "Pending",
+                            "Auditor" => "In Review",
+                            "BoardMember" => "Board Review",
+                            "Approved" => "Approved",
+                            "Rejected" => "Rejected",
+                            "Completed" => "Completed",
+                            _ => Model.CurrentPhase
+                        };
+                    }
+
+                    <div class="d-flex align-items-center">
+                        <span class="@phaseBadge px-4 py-3 rounded-3 fw-semibold fs-5 me-3">
+                            @Model.CurrentPhase
+                        </span>
+                        <span class="badge @statusClass px-3 py-2">
+                            <i class="bi bi-circle-fill me-1 small"></i> @statusText
+                        </span>
+                        @if (Model.StatusTime.HasValue)
+                        {
+                            <span class="ms-3 text-muted">
+                                <i class="bi bi-clock-history me-1"></i>
+                                Updated: @Model.StatusTime.Value.ToString("dd/MM/yyyy HH:mm")
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accountant Fields -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h3 class="card-title mb-0 fw-bold">Accountant Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="border rounded p-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Accountant:</strong> @Model.AccountantUser?.Name
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Status:</strong>
+                                <span class="badge bg-light-info text-info">Initial Review</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Date:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                            <div class="col-md-3">
+                                @if (!string.IsNullOrEmpty(Model.AccountantFileUrl))
+                                {
+
+                                    <p><strong>Attachment:</strong>   <a href="@Model.AccountantFileUrl" target="_blank" class="btn btn-sm btn-light-primary">View File</a></p>
+                                }
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <strong>Comment:</strong> @(string.IsNullOrEmpty(Model.AccountantComment) ? "No comment provided" : Model.AccountantComment)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Holder Fields -->
+            @if (Model.HolderFields != null && Model.HolderFields.Any())
+            {
+                <div class="card shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title mb-0 fw-bold">Holder Transactions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th><strong>Date</strong></th>
+                                        <th><Strong>Comment</Strong></th>
+                                        <th><Strong>Amount</Strong></th>
+                                        <th><Strong>Currency</Strong></th>
+                                        <th><Strong>Cost Center</Strong></th>
+                                        <th><Strong>Expenses</Strong></th>
+                                        <th><Strong>Invoice</Strong></th>
+                                        <th><Strong>File</Strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var field in Model.HolderFields)
+                                    {
+                                        <tr>
+                                            <td>@field.Date.ToString("dd/MM/yyyy")</td>
+                                            <td>@field.Comment</td>
+                                            <td>@field.Amount.ToString("N2")</td>
+                                            <td>@field.Currency</td>
+                                            <td>@field.CostCenter</td>
+                                            <td>@field.Expenses</td>
+                                            <td>@field.Invoice</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(field.FileUrl))
+                                                {
+                                                    <a href="@field.FileUrl" target="_blank" class="btn btn-sm btn-light-primary">View</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Auditor Fields -->
+            @if (Model.AuditorApprovals != null && Model.AuditorApprovals.Any())
+            {
+                <div class="card shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title mb-0 fw-bold">Auditor Reviews</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var audit in Model.AuditorApprovals.OrderByDescending(a => a.CreatedAt))
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Auditor:</strong> @audit.AuditorUser?.Name
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Status:</strong>
+                                        <span class="badge @(audit.Status == "Approved" ? "bg-success" : audit.Status == "Rejected" ? "bg-danger" : audit.Status == "Redirect" ? "bg-warning" : "bg-secondary")">
+                                            @audit.Status
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Date:</strong> @audit.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </div>
+                                    <div class="col-md-3">
+                                        @if (!string.IsNullOrEmpty(audit.AuditFileUrl))
+                                        {
+                                            <a href="@audit.AuditFileUrl" target="_blank" class="btn btn-sm btn-light-primary">View File</a>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <strong>Comment:</strong> @audit.Comment
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Board Member Fields -->
+            @if (Model.BoardMemberApprovals != null && Model.BoardMemberApprovals.Any())
+            {
+                <div class="card shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title mb-0 fw-bold">Board Member Reviews</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var board in Model.BoardMemberApprovals.OrderByDescending(b => b.CreatedAt))
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Board Member:</strong> @board.BoardMemberUser?.Name
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Status:</strong>
+                                        <span class="badge @(board.Status == "Approved" ? "bg-success" : board.Status == "Rejected" ? "bg-danger" : board.Status == "Redirect" ? "bg-warning" : "bg-secondary")">
+                                            @board.Status
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Date:</strong> @board.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </div>
+                                    <div class="col-md-3">
+                                        @if (!string.IsNullOrEmpty(board.BoardMemberFileUrl))
+                                        {
+                                            <a href="@board.BoardMemberFileUrl" target="_blank" class="btn btn-sm btn-light-primary">View File</a>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <strong>Comment:</strong> @board.Comment
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
